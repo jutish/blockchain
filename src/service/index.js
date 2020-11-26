@@ -13,6 +13,10 @@ app.get('/blocks',(req,res)=>{
 	res.json(blockchain.blocks)
 });
 
+app.post('/mine',(req,res)=>{
+	const{body:{data}} = req; //Descompongo el body y de body obtengo un parametro llamado data.
+	const block = blockchain.addBlock(data) //Creo un nuevo bloque usando la variable data
+});
 
 app.listen(HTTP_PORT, ()=>{
 	console.log(`Service HTTP: ${HTTP_PORT} listening`)
