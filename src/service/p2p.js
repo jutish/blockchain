@@ -13,8 +13,6 @@ class P2PService{
 		const server = new WebSocket.Server({ port: P2P_PORT }); //Crea un Server WebSocket
 		server.on('connection',(socket)=>{this.onConnection(socket)});
 
-		console.log(PEERS)
-
 		peers.forEach((peer)=>{ //Me conecto a una lista de peers y me agrego a la misma
 			const socket = new WebSocket(peer); //Esto crea un Socket Cliente
 			socket.on('open',()=>{this.onConnection(socket)})

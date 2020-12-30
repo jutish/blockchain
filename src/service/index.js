@@ -27,6 +27,6 @@ app.post('/mine',(req,res)=>{
 });
 
 app.listen(HTTP_PORT, ()=>{
-	console.log(`Service HTTP: ${HTTP_PORT} listening`)
+	console.log(`Service HTTP: ${HTTP_PORT} listening..`)
 	p2pService.listen();
 });
