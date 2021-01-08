@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "babel-node ./src/service/index.js",
-    "start2": "set HTTP_PORT=3001 && set P2P_PORT=5001 && set PEERS=ws:localhost:5000 && babel-node ./src/service/index.js", //Pequeño script para windows que setea las variables de entorno y levanta los servicios en los puertos 3001 y 5001, ademas le pasa la url del WS en el 5000
+    "start2": "set HTTP_PORT=3001 && set P2P_PORT=5001 && set PEERS=ws:localhost:5000 && babel-node ./src/service/index.js", 
     "nodemon": "nodemon --exec yarn start",
     "lint": "eslint index.js src",
     "test": "jest",

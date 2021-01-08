@@ -11,8 +11,6 @@ const p2pService = new P2PService(blockchain); //Instanciamos P2PService y le pa
 
 app.use(bodyParser.json()); //Usamose el middleware BodyParser
 
-blockchain.addBlock('express');
-
 app.get('/blocks',(req,res)=>{
 	res.json(blockchain.blocks)
 });
