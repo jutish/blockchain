@@ -18,6 +18,7 @@ app.get('/blocks',(req,res)=>{
 app.post('/mine',(req,res)=>{
 	const{body:{data}} = req; //Descompongo el body y de body obtengo un parametro llamado data.
 	const block = blockchain.addBlock(data) //Creo un nuevo bloque usando la variable data
+	p2pService.sync(); //Luego de agregar un nuevo bloque a mi blockchain envio mi blockchain al resto de los nodos conectados a mi.
 	res.json({
 		blocks: blockchain.blocks.length,
 		block,

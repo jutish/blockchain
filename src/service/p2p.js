@@ -24,22 +24,32 @@ class P2PService{
 
 	//Cuando alguien se conecta a mi o yo me conecto a alguien se ejecuta este metodo.
 	onConnection(socket){
-		const {blockchain:{blocks}} = this;
+		const {blockchain} = this;
 		console.log('[ws:socket] connected.');
 		this.sockets.push(socket); //Agrego el nuevo Socket al array Sockets
 		//Para saber si recibo un mensaje me suscribo a la accion "message"
 		socket.on('message',(message)=>{
 			const{type,value} = JSON.parse(message); //Con parse, paso el texto recibido a Json.
-			console.log({type,value})
+			try{ //Uso Try/Catch porque el metodo .replace puede lanzar alguna excepcion
+				if (type === MESSAGE.BLOCKS) blockchain.replace(value); //Si recibo un mensaje del tipo BLOCKS en value vienen los bloques
+			}catch(error){
+				console.log(`[ws:message] error ${error}`);
+			}
 		});
 		//Cuando me conecto o se conectan a mi les voy a enviar la lista de bloques que tenemos.
-		socket.send(JSON.stringify({type:MESSAGE.BLOCKS, value:blocks })); //Con stringify paso el Json a texto
+		socket.send(JSON.stringify({type:MESSAGE.BLOCKS, value:blockchain.blocks })); //Con stringify paso el Json a texto
 	}
 
 	broadcast(type,value){
 		console.log(`[ws:broadcast] ${type}...`);
 		const message = JSON.stringify({type,value});
 		this.sockets.forEach((socket)=>{socket.send(message)});
+	}
+
+	//Se usa cuando queremos comunicar a toda la red los bloques que tenemos
+	sync(){
+		const {blockchain:{blocks}} = this;
+		this.broadcast(MESSAGE.BLOCKS,blocks);
 	}
 }
 
