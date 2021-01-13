@@ -38,7 +38,7 @@ class Block{
 
 	toString(){
 		const{
-			timestamp,previousHash,hash,data
+			timestamp,previousHash,hash,data,nonce
 		} = this;
 	
 	return `Block -
@@ -52,4 +52,5 @@ class Block{
 	}
 }
 
+export {DIFFICULTY};
 export default Block;
