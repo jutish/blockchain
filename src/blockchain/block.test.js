@@ -27,9 +27,9 @@ describe('Block',() => {
 
 	it('use static mine()',()=>{
 		const block = Block.mine(previousBlock,data);
-
+		let { difficulty } = block;
 		expect(block.hash.length).toEqual(64); //Un hash correcto tiene 64 caracteres.
-		expect(block.hash.substring(0,DIFFICULTY)).toEqual('0'.repeat(DIFFICULTY)); //Espero que el hash comience con los ceros determinados por la dificultad
+		expect(block.hash.substring(0,difficulty)).toEqual('0'.repeat(difficulty)); //Espero que el hash comience con los ceros determinados por la dificultad
 		expect(block.previousHash).toEqual(previousBlock.hash);
 		expect(block.data).toEqual(data);
 		expect(block.nonce).not.toEqual(0);	
@@ -37,7 +37,7 @@ describe('Block',() => {
 
 	it('use static hash()',()=>{
 		const hash = Block.hash(timestamp,previousBlock.hash,data,nonce);
-		const expect_hash = 'eac704a381f6d805847b01cb7086b5d74bdd7a39a5c589f88474c4aa42bcccbe';
+		const expect_hash = "1e689a29a8b81b45ed77275abccb5dca29761f268acd855c839ec38036dc45dc";
 
 		expect(hash).toEqual(expect_hash);
 	});

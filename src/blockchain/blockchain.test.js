@@ -28,7 +28,6 @@ describe('Blockchain',()=>{
 
 	it('replaces the chain with a valid chain',()=>{
 		let bloque = blockchainB.addBlock('bl4ck-1');
-		console.log(bloque)
 		blockchain.replace(blockchainB.blocks);
 		expect(blockchain.blocks).toEqual(blockchainB.blocks);
 	});
