@@ -20,6 +20,13 @@ class Transaction{
 			{ amount: amount, address: recipientAdress} //Luego el monto transferido y la PublicKey de su direccion.
 		]);
 
+		transaction.input = {
+			timestamp: Date.now(),
+			amount: senderWallet.balance,
+			address: senderWallet.publicKey,
+			signature: senderWallet.sign(transaction.outputs),
+		}
+
 		return transaction;
 	}
 
