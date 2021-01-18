@@ -1,9 +1,9 @@
-import uuidV1 from 'uuid/v1'; //universal unic id, instancio el metodo uuidV1	
-
+//import uuidV1 from 'uuid/v1'; //universal unic id, instancio el metodo uuidV1	
+import { v1 as uuidv1 } from 'uuid';
 class Transaction{
 
 	constructor(){
-		this.id = uuidV1();
+		this.id = uuidv1();
 		this.input = null;
 		this.outputs =[];
 	}
@@ -20,7 +20,7 @@ class Transaction{
 			{ amount: amount, address: recipientAdress} //Luego el monto transferido y la PublicKey de su direccion.
 		]);
 
-
+		return transaction;
 	}
 
 }
