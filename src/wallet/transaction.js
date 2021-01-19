@@ -30,6 +30,12 @@ class Transaction{
 		return transaction;
 	}
 
+	static verify(transaction){
+		const { input: { address, signature }, outputs } = transaction;
+	}
+
+	
+
 }
 
 export default Transaction;

@@ -1,13 +1,11 @@
-import Elliptic from 'elliptic';
-import hashSign from '../modules/hash';
-
-const ec = new Elliptic.ec('secp256k1'); //Creo una nueva curva eliptica
+import { elliptic, hash } from '../modules';
+	
 const INITIAL_BALANCE = 100;
 
 class Wallet {
 	constructor(){
 		this.balance = INITIAL_BALANCE;
-		this.keyPair = ec.genKeyPair();
+		this.keyPair = elliptic.createKeyPair();
 		this.publicKey = this.keyPair.getPublic().encode('hex');
 	};
 
@@ -21,7 +19,7 @@ class Wallet {
 	}
 
 	sign(data){
-		return this.keyPair.sign(hashSign(data));
+		return this.keyPair.sign(hash(data));
 	}
 }
 
