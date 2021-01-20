@@ -1,5 +1,6 @@
-//import uuidV1 from 'uuid/v1'; //universal unic id, instancio el metodo uuidV1	
 import { v1 as uuidv1 } from 'uuid';
+import { elliptic } from '../modules';
+
 class Transaction{
 
 	constructor(){
@@ -32,6 +33,8 @@ class Transaction{
 
 	static verify(transaction){
 		const { input: { address, signature }, outputs } = transaction;
+
+		return elliptic.verifySignature(address, signature, outputs);
 	}
 
 	

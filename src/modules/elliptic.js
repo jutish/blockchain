@@ -8,4 +8,4 @@ export default {
 	verifySignature: (publicKey, signature, data) => {
 		return ec.keyFromPublic(publicKey,'hex').verify(hash(data), signature);
 	},
-}
+};
