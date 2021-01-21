@@ -61,5 +61,28 @@ describe('transaction',() => {
 		expect(Transaction.verify(transaction)).toBe(false);
 	});
 
+	describe('and updating a transaction',() => {
+		let nextAmount;
+		let nextRecipient;
+
+		beforeEach(() => {
+			nextAmount = 3;
+			nextRecipient = 'Otra_addres';
+			transaction = transaction.update(wallet, nextRecipient, nextAmount);
+		});
+
+		it('substracts the next amount from the sender wallet',() => {
+			const senderOutput = transaction.outputs.find((output) => output.address == wallet.publicKey)
+			expect(senderOutput.amount).toEqual(wallet.balance - amount - nextAmount)
+		});
+
+		it('outputs an amount for the next recipient',() => {
+			const output = transaction.outputs.find(({ address }) => address == nextRecipient)
+			expect(output.amount).toEqual(nextAmount);
+		});
+
+
+	});
+
 
 });
