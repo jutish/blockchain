@@ -21,12 +21,7 @@ class Transaction{
 			{ amount: amount, address: recipientAdress} //Luego el monto transferido y la PublicKey de su direccion.
 		]);
 
-		transaction.input = {
-			timestamp: Date.now(),
-			amount: senderWallet.balance,
-			address: senderWallet.publicKey,
-			signature: senderWallet.sign(transaction.outputs),
-		}
+		transaction.input = Transaction.sign(transaction, senderWallet);
 
 		return transaction;
 	}
@@ -35,6 +30,27 @@ class Transaction{
 		const { input: { address, signature }, outputs } = transaction;
 
 		return elliptic.verifySignature(address, signature, outputs);
+	}
+
+	static sign(transaction, senderWallet){
+		return {
+			timestamp: Date.now(),
+			amount: senderWallet.balance,
+			address: senderWallet.publicKey,
+			signature: senderWallet.sign(transaction.outputs),
+		};
+	}
+
+	update(senderWallet, recipientAdress, amount){
+		senderOutput = this.outputs.find((output) => output.address === senderWallet.address);
+		
+		if(amount > senderOutput.amount) throw Error(`Amount: ${amount} exceeds balance`);
+
+		senderOutput.amount -= amount;
+		this.outputs.push({ amount, address:recipientAdress }); 
+		this.input = Transaction.sign(this,senderWallet)
+
+		return this;
 	}
 
 	
