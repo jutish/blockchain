@@ -1,9 +1,11 @@
 import Block from './block'; 
-import validate from './modules/validate'
+import validate from './modules/validate';
+import MemoryPool from './memoryPool';
 
 class Blockchain{
 	constructor(){
 		this.blocks = [Block.genesis];
+		this.memoryPool = new MemoryPool();
 	}
 
 	addBlock(data){
@@ -22,7 +24,6 @@ class Blockchain{
 		}
 		this.blocks = newBlocks;
 		return this.blocks;
-
 	}
 
 }
