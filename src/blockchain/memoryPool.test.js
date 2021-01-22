@@ -16,4 +16,22 @@ describe('MemoryPool', () => {
 	it('has one transaction', () => {
 		expect(memoryPool.transactions.length).toEqual(1);
 	});
+
+	it('adds a transaction to the memoryPool', () => {
+		const found = memoryPool.transactions.find(({ id }) => id === transaction.id );
+		expect(found).toEqual(transaction)
+	});
+
+	it('updates a transaction in the memoryPool', () => {
+		const txOld = JSON.stringify(transaction);
+		const txNew = transaction.update(wallet, 'other_address', 10);
+		
+		memoryPool.addOrUpdate(txNew);
+
+		expect(memoryPool.transactions.length).toEqual(1);
+
+		const found = memoryPool.transactions.find(({ id }) => id === transaction.id );
+		expect(JSON.stringify(txNew)).not.toEqual(txOld);
+		expect(txNew).toEqual(found);
+	})
 });
