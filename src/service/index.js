@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import Blockchain from '../blockchain';
-import P2PService from './p2p';
+import P2PService, { MESSAGE } from './p2p';
 import Wallet from '../wallet';
 
 const {HTTP_PORT = 3000} = process.env; //Si HTTP_PORT no esta en el ambiente, toma 3000 por defecto.
@@ -36,6 +36,7 @@ app.post('/transaction',( req, res) => {
 	const { body: { recipient, amount } } = req;
 	try{
 		const tx = wallet.createTransaction(recipient, amount);
+		p2pService.broadcast(MESSAGE.TX, tx);
 		res.json(tx);
 	}catch (error){
 		res.json({ error: error.message });
