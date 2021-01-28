@@ -22,6 +22,10 @@ class MemoryPool{
 		return this.transactions.find(({ input }) => input.address === address);
 	}
 
+	wipe(){
+		this.transactions = []
+	}
+
 }
 
 export default MemoryPool; 

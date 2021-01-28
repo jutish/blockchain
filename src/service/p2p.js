@@ -5,6 +5,7 @@ const peers = PEERS ? PEERS.split(',') : []; //Si PEERS tiene datos, devuelvo un
 const MESSAGE = {
 	BLOCKS: 'blocks',
     TX: 'transaction', 
+     : 'wipe_memorypool',
 }; //Creo una constante para tipificar los distintos tipos de mensajes que vamos a ir pasando
 
 class P2PService{
@@ -38,6 +39,7 @@ class P2PService{
 			try{ //Uso Try/Catch porque el metodo .replace puede lanzar alguna excepcion
 				if (type === MESSAGE.BLOCKS) blockchain.replace(value); //Si recibo un mensaje del tipo BLOCKS en value vienen los bloques
 				else if (type === MESSAGE.TX) blockchain.memoryPool.addOrUpdate(value);
+				else if (type === MESSAGE.WIPE) blockchain.memoryPool.wipe(); //cuando se reciba este mensaje se borra la memory pool
 			}catch(error){
 				console.log(`[ws:message] error ${error}`);
 				throw Error(error);

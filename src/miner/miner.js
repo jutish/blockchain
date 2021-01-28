@@ -1,4 +1,5 @@
 import { Transaction, blockchainWallet }  from '../wallet'
+import { MESSAGE } from '../service/p2p';
 
 class Miner{
 
@@ -16,8 +17,8 @@ class Miner{
 		if(memoryPool.transactions.length === 0) throw Error('There are no unconfirmed transactions.');
 
 		/*
-		4. Wipe transactions from memory pool.
-		5. Broadcasting wipe message to every node.
+
+
 		*/
 		
 		// 1. Include reward to miner in transaction.
@@ -28,6 +29,12 @@ class Miner{
 		
 		// 3. Sync new blockchain with the network.
 		p2pService.syn();
+
+		//4. Wipe transactions from memory pool.
+		memoryPool.wipe();
+
+		//5. Broadcasting wipe message to every node.
+		p2p.service.broadcast(MESSAGE.WIPE)
 
 		return block;
 	}
