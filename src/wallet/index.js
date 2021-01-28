@@ -1,5 +1,7 @@
 import Wallet from './wallet'
 import Transaction from './transaction'
 
-export { Transaction };
+const blockchainWallet = new Wallet(); //Esta se crea exclusivamente para pagarle a los miners.
+
+export { Transaction, blockchainWallet };
 export default Wallet;

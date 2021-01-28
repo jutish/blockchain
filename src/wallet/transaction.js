@@ -28,8 +28,9 @@ class Transaction{
 		return transaction;
 	}
 
+	//Crea una transaction para recompensar al Miner. Toma monedas de blockchainWallet y las envia a MinerWallet
 	static reward(minerWallet, blockchainWallet){
-		return transaction = this.create(blockchainWallet, minerWallet.publicKey, REWARD);
+		return this.create(blockchainWallet, minerWallet.publicKey, REWARD);
 	}
 
 	static verify(transaction){
