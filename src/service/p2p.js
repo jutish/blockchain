@@ -5,7 +5,7 @@ const peers = PEERS ? PEERS.split(',') : []; //Si PEERS tiene datos, devuelvo un
 const MESSAGE = {
 	BLOCKS: 'blocks',
     TX: 'transaction', 
-     : 'wipe_memorypool',
+    WIPE : 'wipe_memorypool',
 }; //Creo una constante para tipificar los distintos tipos de mensajes que vamos a ir pasando
 
 class P2PService{

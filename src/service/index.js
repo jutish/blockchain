@@ -3,13 +3,16 @@ import bodyParser from 'body-parser';
 import Blockchain from '../blockchain';
 import P2PService, { MESSAGE } from './p2p';
 import Wallet from '../wallet';
+import Miner from '../miner';
 
 const {HTTP_PORT = 3000} = process.env; //Si HTTP_PORT no esta en el ambiente, toma 3000 por defecto.
 
 const app = express(); //Creamos una nueva app de express()
 const blockchain = new Blockchain(); //Instanciamos una nueva Blockchain
 const wallet = new Wallet(blockchain);
+const walletMiner = new Wallet(blockchain, 0);
 const p2pService = new P2PService(blockchain); //Instanciamos P2PService y le pasamos la blockchain.
+const miner = new Miner(blockchain, p2pService, walletMiner);
 
 app.use(bodyParser.json()); //Usamose el middleware BodyParser
 
@@ -41,7 +44,15 @@ app.post('/transaction',( req, res) => {
 	}catch (error){
 		res.json({ error: error.message });
 	}
+});
 
+app.get('/mine/transactions',(req, res) => {
+	try {
+		miner.mine();
+		res.redirect('/blocks');
+	} catch (error) {
+		res.json({ error: error.message });
+	}
 });
 
 app.listen(HTTP_PORT, ()=>{
