@@ -25,7 +25,8 @@ class Wallet {
 	}
 
 	createTransaction(recipientAddress, amount){
-		const { balance, blockchain:{ memoryPool } } = this;
+		const { blockchain:{ memoryPool } } = this;
+		const balance = this.calculateBalance();
 
 		if (amount > balance) throw Error(`Amount: ${amount} exceds current balance: ${balance}`);
 
@@ -37,7 +38,44 @@ class Wallet {
 			memoryPool.addOrUpdate(tx);
 		}
 
-	return tx;
+		return tx;
+	}
+
+	calculateBalance(){
+		const { blockchain: { blocks = [] }, publicKey } = this;
+		let { balance } = this;
+		const txs = []; //Guarda todas las transacciones de la blockchain
+
+		//En el campo data de cada bloque figuran las transacciones ya minadas. 
+		//El bloque genesis en ese campo tiene un texto por eso hay que solo tener en cuenta donde data es un array.
+		blocks.forEach(({ data = []}) => {
+			if (Array.isArray(data)) data.forEach((tx) => txs.push(tx));
+		});
+
+		//Buscar los inputs de nuestra wallet
+		const walletInputsTxs = txs.filter((tx) => tx.input.address === publicKey);
+		let timestamp = 0;
+		//Chequeo que al menos hayamos enviado dinero una vez y obtengo la ultima Tx que firmamos
+		if(walletInputsTxs.length > 0){
+			const recentInputTx = walletInputsTxs
+				.sort((a,b) => a.input.timestamp - b.input.timestamp) //Una forma facil de ordenar por fecha 
+				.pop() //Orden las transacciones por fecha y me quedo con la ultima haciendo un pop() 
+
+			//De la ultima transaccion veo los outputs y busco mi publicKey dado que ahi figura el balance actualizado
+			balance = recentInputTx.outputs.find(({ address }) => address === publicKey).amount;
+			//Nos quedamos con el timestamp de la ultima Tx, porque despues buscamos aquellas posteriores donde recibimos dinero.
+			timestamp = recentInputTx.input.timestamp;  
+		}
+
+		txs
+			.filter(({ input }) => input.timestamp > timestamp) //Me quedo con las Txs posteriores al ultimo pago que realize
+			.forEach(({ outputs }) => { //Por cada Tx donde soy el receptor sumo el amount al balance 
+				outputs.find(({ address, amount }) => {
+					if(address === publicKey) balance += amount; //Aca yo soy el receptor
+				});
+			});
+
+		return balance;	
 	}
 }
 
