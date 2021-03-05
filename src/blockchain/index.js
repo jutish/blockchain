@@ -1,5 +1,5 @@
-import Block from './block'
-import Blockchain from './blockchain'
+import Block from './block';
+import Blockchain from './blockchain';
 
-export {Block};	
+export { Block };
 export default Blockchain;

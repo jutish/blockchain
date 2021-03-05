@@ -1,42 +1,42 @@
 import MemoryPool from './memoryPool';
-import Wallet, { Transaction } from '../wallet'; //Esto lo puedo hacer gracias al index.js creado en la carpeta wallet
+import Wallet, { Transaction } from '../wallet'; // Esto lo puedo hacer gracias al index.js creado en la carpeta wallet
 
 describe('MemoryPool', () => {
-	let memoryPool;
-	let wallet;
-	let transaction
+  let memoryPool;
+  let wallet;
+  let transaction;
 
-	beforeEach(() => {
-		memoryPool = new MemoryPool();
-		wallet = new Wallet();
-		transaction = Transaction.create(wallet,'dest_address',5);
-		memoryPool.addOrUpdate(transaction);
-	});
+  beforeEach(() => {
+    memoryPool = new MemoryPool();
+    wallet = new Wallet();
+    transaction = Transaction.create(wallet, 'dest_address', 5);
+    memoryPool.addOrUpdate(transaction);
+  });
 
-	it('has one transaction', () => {
-		expect(memoryPool.transactions.length).toEqual(1);
-	});
+  it('has one transaction', () => {
+    expect(memoryPool.transactions.length).toEqual(1);
+  });
 
-	it('adds a transaction to the memoryPool', () => {
-		const found = memoryPool.transactions.find(({ id }) => id === transaction.id );
-		expect(found).toEqual(transaction)
-	});
+  it('adds a transaction to the memoryPool', () => {
+    const found = memoryPool.transactions.find(({ id }) => id === transaction.id);
+    expect(found).toEqual(transaction);
+  });
 
-	it('updates a transaction in the memoryPool', () => {
-		const txOld = JSON.stringify(transaction);
-		const txNew = transaction.update(wallet, 'other_address', 10);
-		
-		memoryPool.addOrUpdate(txNew);
+  it('updates a transaction in the memoryPool', () => {
+    const txOld = JSON.stringify(transaction);
+    const txNew = transaction.update(wallet, 'other_address', 10);
 
-		expect(memoryPool.transactions.length).toEqual(1);
+    memoryPool.addOrUpdate(txNew);
 
-		const found = memoryPool.transactions.find(({ id }) => id === transaction.id );
-		expect(JSON.stringify(txNew)).not.toEqual(txOld);
-		expect(txNew).toEqual(found);
-	})
+    expect(memoryPool.transactions.length).toEqual(1);
 
-	it('wipes transactions', () => {
-		memoryPool.wipe();
-		expect(memoryPool.transactions.length).toEqual(0);
-	});
+    const found = memoryPool.transactions.find(({ id }) => id === transaction.id);
+    expect(JSON.stringify(txNew)).not.toEqual(txOld);
+    expect(txNew).toEqual(found);
+  });
+
+  it('wipes transactions', () => {
+    memoryPool.wipe();
+    expect(memoryPool.transactions.length).toEqual(0);
+  });
 });
